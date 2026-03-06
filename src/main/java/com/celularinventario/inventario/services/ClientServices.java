@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.celularinventario.inventario.dto.PhoneResponseDTO;
 import com.celularinventario.inventario.entity.Phone;
-import com.celularinventario.inventario.repository.PhonesRepository;
+import com.celularinventario.inventario.repository.PhoneRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,18 +12,18 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ClientServices {
     
-    private final PhonesRepository phonesRepository;
+    private final PhoneRepository phoneRepository;
 
     public PhoneResponseDTO buyPhone(Integer id, Integer quantity) {
 
-        Phone phone = phonesRepository.findById(id).orElseThrow(() -> new RuntimeException("Phone not found"));
+        Phone phone = phoneRepository.findById(id).orElseThrow(() -> new RuntimeException("Phone not found"));
 
         if (phone.getStock() < quantity) {
             throw new RuntimeException("Not enough stock available");
         }
 
         phone.setStock(phone.getStock() - quantity);
-        phonesRepository.save(phone);
+        phoneRepository.save(phone);
         PhoneResponseDTO responseDTO = new PhoneResponseDTO();
         responseDTO.setMarca(phone.getMarca());
         responseDTO.setModelo(phone.getModelo());
