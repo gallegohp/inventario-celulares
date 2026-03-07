@@ -1,7 +1,10 @@
 package com.celularinventario.inventario.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,10 +13,12 @@ import com.celularinventario.inventario.dto.PhoneRequestDTO;
 import com.celularinventario.inventario.dto.PhoneResponseDTO;
 import com.celularinventario.inventario.services.PhoneService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,12 +32,24 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class PhoneController {
     private final PhoneService phoneService;
 
-    @PostMapping
-    public ResponseEntity<PhoneResponseDTO> createPhone(@RequestBody PhoneRequestDTO phoneRequestDTO) {
-        PhoneResponseDTO response = phoneService.createPhone(phoneRequestDTO);
+    @PostMapping 
+    public ResponseEntity<?> createPhone(@Valid @RequestBody PhoneRequestDTO phoneRequestDTO, BindingResult bindingResult) {
+    
+    if (bindingResult.hasErrors()) { // booleano que indica si hay errores de validación
+        
+        Map<String, String> errores = new HashMap<>(); // mapa para almacenar los errores de validación
+        
+        bindingResult.getFieldErrors().forEach(err -> { 
+            errores.put(err.getField(), err.getDefaultMessage()); // for para la lista, y se guarda (campo, error)
+        }); 
+        
+        return ResponseEntity.badRequest().body(errores); 
+    } 
+    
+    PhoneResponseDTO response = phoneService.createPhone(phoneRequestDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
+    return ResponseEntity.status(HttpStatus.CREATED).body(response); 
+}
 
     @GetMapping
     public ResponseEntity<List<PhoneResponseDTO>> getPhones() {

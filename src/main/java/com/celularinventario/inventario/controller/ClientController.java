@@ -19,13 +19,13 @@ public class ClientController {
     private final ClientServices clientServices;
 
     @PatchMapping("/buy/{id}/{quantity}")
-    public ResponseEntity<PhoneResponseDTO> buyPhone(@PathVariable Integer id, @PathVariable Integer quantity) {
+    public ResponseEntity<String> buyPhone(@PathVariable Integer id, @PathVariable Integer quantity) {
         try {
             PhoneResponseDTO response = clientServices.buyPhone(id, quantity);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response.getMessage());
 
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
         }
     }
 
