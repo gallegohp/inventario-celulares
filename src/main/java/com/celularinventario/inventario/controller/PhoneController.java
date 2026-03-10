@@ -83,11 +83,9 @@ public class PhoneController {
             Optional<PhoneResponseDTO> optionalResponse = phoneService.getAPhone(id);
 
             if (optionalResponse.isPresent()) {
-                PhoneResponseDTO deletePhone = optionalResponse.get();
+                PhoneResponseDTO response = phoneService.deletePhone(id);
 
-                phoneService.deletePhone(id);
-
-                return ResponseEntity.status(HttpStatus.OK).body(deletePhone);
+                return ResponseEntity.status(HttpStatus.OK).body(response);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
