@@ -97,4 +97,25 @@ public class PhoneService {
             phoneRepository.deleteById(id);
         }
     }
+
+    public PhoneResponseDTO updatePhoneStock(Integer id, Integer quantity) {
+        Optional<Phone> optionalPhone = phoneRepository.findById(id);
+
+        if (optionalPhone.isPresent()) {
+            Phone phone = optionalPhone.get();
+            phone.setStock(phone.getStock() + quantity);
+            if (phone.getStock() != 0) {
+                phone.setDisponibilidad(true);
+            }
+            phoneRepository.save(phone);
+
+            PhoneResponseDTO response = new PhoneResponseDTO();
+            response.setMessage("Stock actualizado correctamente y estado de disponibilidad actualizado a true");
+
+            return response;
+        } else {
+            throw new RuntimeException("Celular no encontrado");
+        }
+    }
+
 }
