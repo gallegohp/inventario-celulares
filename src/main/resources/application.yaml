@@ -2,7 +2,11 @@ spring:
   application:
     name: inventario
   datasource: 
+<<<<<<< Updated upstream
     url: jdbc:mysql://localhost:3306/inventario_celulares
+=======
+    url: jdbc:mysql://localhost:3306/inventario-celular
+>>>>>>> Stashed changes
     username: root
     password: martha200714
     driver-class-name: com.mysql.cj.jdbc.Driver
