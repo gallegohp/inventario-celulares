@@ -2,11 +2,7 @@ spring:
   application:
     name: inventario
   datasource: 
-<<<<<<< HEAD
-    url: jdbc:mysql://localhost:3306/inventario_celular
-=======
     url: jdbc:mysql://localhost:3306/inventario-celular
->>>>>>> 1b933367c98752d8737d7ceb55bf8e58a729065c
     username: root
     password: 
     driver-class-name: com.mysql.cj.jdbc.Driver

@@ -22,7 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -32,6 +34,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequiredArgsConstructor
 @RequestMapping("/phone")
 @Validated
+//@CrossOrigin(origins = "*")
+
 public class PhoneController {
     private final PhoneService phoneService;
 
@@ -104,5 +108,24 @@ public class PhoneController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+    @PutMapping("/{id}")
+        public ResponseEntity<?> updatePhone(@PathVariable Integer id,
+                                    @Valid @RequestBody PhoneRequestDTO phoneRequestDTO,
+                                    BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+        Map<String, String> errores = new HashMap<>();
+        bindingResult.getFieldErrors().forEach(err ->
+            errores.put(err.getField(), err.getDefaultMessage())
+        );
+        return ResponseEntity.badRequest().body(errores);
+    }
+
+    try {
+        String mensaje = phoneService.updatePhone(id, phoneRequestDTO);
+        return ResponseEntity.ok(mensaje);
+    } catch (RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+}
 
 }
