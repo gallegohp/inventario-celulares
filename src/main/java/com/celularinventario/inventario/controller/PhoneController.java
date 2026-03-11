@@ -14,21 +14,24 @@ import com.celularinventario.inventario.dto.PhoneResponseDTO;
 import com.celularinventario.inventario.services.PhoneService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/phone")
-
+@Validated
 public class PhoneController {
     private final PhoneService phoneService;
 
@@ -45,7 +48,6 @@ public class PhoneController {
         
         return ResponseEntity.badRequest().body(errores); 
     } 
-    
     String mensajeConfirmacion = phoneService.createPhone(phoneRequestDTO);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(mensajeConfirmacion); 
@@ -91,5 +93,16 @@ public class PhoneController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Inesperado");
         }
     }
-}
 
+    @PatchMapping("/subirStock/{id}/{quantity}")
+    public ResponseEntity<String> updatePhoneStock(@PathVariable @Min(1) Integer id, @PathVariable  @Min(0) Integer quantity ) {
+        try {
+            PhoneResponseDTO response = phoneService.updatePhoneStock(id, quantity);
+            return ResponseEntity.status(HttpStatus.OK).body(response.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+}
