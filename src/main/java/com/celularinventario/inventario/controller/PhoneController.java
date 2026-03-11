@@ -48,10 +48,9 @@ public class PhoneController {
         
         return ResponseEntity.badRequest().body(errores); 
     } 
-    
-    PhoneResponseDTO response = phoneService.createPhone(phoneRequestDTO);
+    String mensajeConfirmacion = phoneService.createPhone(phoneRequestDTO);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(response); 
+    return ResponseEntity.status(HttpStatus.CREATED).body(mensajeConfirmacion); 
 }
 
     @GetMapping
@@ -81,22 +80,17 @@ public class PhoneController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<PhoneResponseDTO> deletePhone(@PathVariable Integer id) {
+    public ResponseEntity<String> deletePhone(@PathVariable Integer id) {
         try {
-            Optional<PhoneResponseDTO> optionalResponse = phoneService.getAPhone(id);
+            String mensajeConfirmacion = phoneService.deletePhone(id);
 
-            if (optionalResponse.isPresent()) {
-                PhoneResponseDTO deletePhone = optionalResponse.get();
+            return ResponseEntity.status(HttpStatus.OK).body(mensajeConfirmacion);
 
-                phoneService.deletePhone(id);
-
-                return ResponseEntity.status(HttpStatus.OK).body(deletePhone);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Inesperado");
         }
     }
 
