@@ -19,12 +19,6 @@ public class ClientServices {
         Phone phone = phoneRepository.findById(id).orElseThrow(() -> new RuntimeException("Celular no encontrado"));
 
         if (phone.getStock() < quantity) {
-<<<<<<< HEAD
-            
-            throw new RuntimeException("No hay suficiente stock disponible");
-        }
-
-=======
             throw new RuntimeException("No hay suficiente stock disponible");
         }
 
@@ -32,7 +26,7 @@ public class ClientServices {
             throw new RuntimeException("El celular no está disponible para la venta");
         }
 
->>>>>>> 1b933367c98752d8737d7ceb55bf8e58a729065c
+
         phone.setStock(phone.getStock() - quantity);
         if (phone.getStock() == 0) {
             phone.setDisponibilidad(false);
