@@ -26,7 +26,7 @@ public class PhoneService {
      * 
      * @return MessageResponseDTO confirma la creación exitosaa
      */
-    public PhoneResponseDTO createPhone(PhoneRequestDTO phoneRequestDTO) {
+    public String createPhone(PhoneRequestDTO phoneRequestDTO) {
         Phone phone = new Phone();
         phone.setMarca(phoneRequestDTO.getMarca());
         phone.setModelo(phoneRequestDTO.getModelo());
@@ -37,10 +37,7 @@ public class PhoneService {
 
         phoneRepository.save(phone);
 
-        PhoneResponseDTO response = new PhoneResponseDTO();
-        response.setMessage("Celular Registrado Correctamente");
-
-        return response;
+        return "Celular Registrado Correctamente";
     }
 
     /**
@@ -92,14 +89,15 @@ public class PhoneService {
         }
     }
 
-    public PhoneResponseDTO deletePhone(Integer id) {
+    public String deletePhone(Integer id) {
 
         if (phoneRepository.existsById(id)) {
             phoneRepository.deleteById(id);
-        }
-        PhoneResponseDTO response = new PhoneResponseDTO();
-        response.setMessage("Celular Eliminado Correctamente");
 
-        return response;
+            return "Celular Eliminado Correctamente";
+        } else {
+            throw new RuntimeException("Celular NO Encontrado");
+        }
+        
     }
 }
