@@ -1,6 +1,7 @@
 package com.celularinventario.inventario.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/client")
 @RestController
+//@CrossOrigin(origins = "*")
+
 public class ClientController {
     
     private final ClientServices clientServices;

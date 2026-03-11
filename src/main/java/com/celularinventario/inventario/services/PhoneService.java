@@ -120,5 +120,20 @@ public class PhoneService {
             throw new RuntimeException("Celular no encontrado");
         }
     }
+    public String updatePhone(Integer id, PhoneRequestDTO phoneRequestDTO) {
+    Phone phone = phoneRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Celular NO Encontrado"));
+
+    phone.setMarca(phoneRequestDTO.getMarca());
+    phone.setModelo(phoneRequestDTO.getModelo());
+    phone.setAnio(phoneRequestDTO.getAnio());
+    phone.setStock(phoneRequestDTO.getStock());
+    phone.setPrecio(phoneRequestDTO.getPrecio());
+    phone.setDisponibilidad(phoneRequestDTO.getDisponibilidad());
+
+    phoneRepository.save(phone);
+
+    return "Celular Actualizado Correctamente";
+}
 
 }
